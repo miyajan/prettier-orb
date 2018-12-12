@@ -15,5 +15,4 @@ jobs:
 workflows:
   pack_and_publish:
     jobs:
-      - orb-tools/publish:
-          orb-path: src/prettier.yml
+      - validate
