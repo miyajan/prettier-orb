@@ -1,0 +1,15 @@
+version: 2.1
+
+jobs:
+  check-yaml:
+    executor: prettier
+    steps:
+      - checkout
+      - run:
+          name: Check YAMLs
+          command: prettier --list-different **/*.{yml,yaml}
+
+executors:
+  prettier:
+    docker:
+      - image: miyajan/prettier:1.15.3
