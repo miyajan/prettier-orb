@@ -13,6 +13,6 @@ jobs:
           orb-path: ./src/prettier.yml
 
 workflows:
-  pack_and_publish:
+  test_and_publish:
     jobs:
       - validate

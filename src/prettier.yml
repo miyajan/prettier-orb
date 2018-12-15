@@ -1,15 +1,72 @@
 version: 2.1
 
-jobs:
-  check-yaml:
-    executor: prettier
+description: |
+  Prettier is an opinionated formatter https://github.com/prettier/prettier
+  Check files that are different from Prettier formatting in your repository.
+  https://github.com/miyajan/prettier-orb
+
+commands:
+  prettier_list_different:
+    description: |
+      Run prettier --list-different over files in the repository.
+    parameters:
+      ignore_path:
+        description: |
+          https://prettier.io/docs/en/cli.html#ignore-path
+          Path to a file containing patterns that describe files to ignore.
+          By default, prettier looks for ./.prettierignore
+        type: string
+        default: ./.prettierignore
+      extension:
+        description: |
+          Files that have this extension are checked by prettier.
+          To specify multiple extensions, use comma separated string. (e.g. yml,yaml)
+        type: string
     steps:
-      - checkout
       - run:
-          name: Check YAMLs
-          command: prettier --list-different **/*.{yml,yaml}
+          name: Run Prettier
+          command: prettier --ignore-path '<< parameters.ignore_path >>' --list-different **/*.{<< parameters.extension >>}
 
 executors:
   prettier:
     docker:
       - image: miyajan/prettier:1.15.3
+
+jobs:
+  check-markdown:
+    description: |
+      Run prettier --list-different over any Markdown files in the repository.
+    parameters:
+      ignore_path:
+        type: string
+        default: ./.prettierignore
+        description: |
+          https://prettier.io/docs/en/cli.html#ignore-path
+          Path to a file containing patterns that describe files to ignore.
+          By default, prettier looks for ./.prettierignore
+    executor: prettier
+    steps:
+      - checkout
+      - prettier_list_different:
+          name: Check YAMLs
+          ignore_path: << parameters.ignore_path >>
+          extension: md
+
+  check-yaml:
+    description: |
+      Run prettier --list-different over any YAML files in the repository.
+    parameters:
+      ignore_path:
+        type: string
+        default: ./.prettierignore
+        description: |
+          https://prettier.io/docs/en/cli.html#ignore-path
+          Path to a file containing patterns that describe files to ignore.
+          By default, prettier looks for ./.prettierignore
+    executor: prettier
+    steps:
+      - checkout
+      - prettier_list_different:
+          name: Check YAMLs
+          ignore_path: << parameters.ignore_path >>
+          extension: yml,yaml
