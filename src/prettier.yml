@@ -24,7 +24,7 @@ commands:
         type: string
     steps:
       - run:
-          name: Run Prettier
+          name: Run Prettier << parameters.extension >>
           command: prettier --ignore-path '<< parameters.ignore_path >>' --list-different **/*.{<< parameters.extension >>}
 
 executors:
@@ -48,7 +48,6 @@ jobs:
     steps:
       - checkout
       - prettier_list_different:
-          name: Check YAMLs
           ignore_path: << parameters.ignore_path >>
           extension: md
 
@@ -67,6 +66,5 @@ jobs:
     steps:
       - checkout
       - prettier_list_different:
-          name: Check YAMLs
           ignore_path: << parameters.ignore_path >>
           extension: yml,yaml
