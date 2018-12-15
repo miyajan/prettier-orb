@@ -16,3 +16,16 @@ workflows:
   test_and_publish:
     jobs:
       - validate
+      - orb-tools/publish:
+          filters:
+            tags:
+              only: /\d+\.\d+\.\d+/
+            branches:
+              ignore: /.*/
+          requires:
+            - validate
+          orb-path: src/prettier.yml
+          orb-ref: miyajan/prettier:${CIRCLE_TAG}
+          publish-token-variable: ${ORB_PUBLISHING_TOKEN}
+          validate: false
+          checkout: true
