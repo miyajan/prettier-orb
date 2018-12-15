@@ -33,6 +33,42 @@ executors:
       - image: miyajan/prettier:1.15.3
 
 jobs:
+  check-javascript:
+    description: |
+      Run prettier --list-different over any JavaScript files in the repository.
+    parameters:
+      ignore_path:
+        type: string
+        default: ./.prettierignore
+        description: |
+          https://prettier.io/docs/en/cli.html#ignore-path
+          Path to a file containing patterns that describe files to ignore.
+          By default, prettier looks for ./.prettierignore
+    executor: prettier
+    steps:
+      - checkout
+      - prettier_list_different:
+          ignore_path: << parameters.ignore_path >>
+          extension: js
+
+  check-typescript:
+    description: |
+      Run prettier --list-different over any TypeScript files in the repository.
+    parameters:
+      ignore_path:
+        type: string
+        default: ./.prettierignore
+        description: |
+          https://prettier.io/docs/en/cli.html#ignore-path
+          Path to a file containing patterns that describe files to ignore.
+          By default, prettier looks for ./.prettierignore
+    executor: prettier
+    steps:
+      - checkout
+      - prettier_list_different:
+          ignore_path: << parameters.ignore_path >>
+          extension: ts
+
   check-markdown:
     description: |
       Run prettier --list-different over any Markdown files in the repository.
